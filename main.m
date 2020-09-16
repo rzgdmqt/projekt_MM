@@ -18,7 +18,7 @@ X = dis_ver(u0,zac,L,M)  % rešimo problem diskretne verižnice
 n = 100;  % število simuliranih odbojev
 v0 = [2; 1];  % vektor začetne hitrosti
 p0 = [-1; 1];  % vektor začetne lege
-prozno = fasle;  % če želimo prožne odboje je true, sicer false. Če 
+prozno = false;  % če želimo prožne odboje je true, sicer false. Če 
 % nastavimo na false, risanka traja dlje in je zato bolj zanimivo.
 [T, P, V] = odboji(X, p0, v0, n, prozno)  % poračunamo čase, lege in hitrosti za n odbojev
 

@@ -6,18 +6,19 @@
 A = [0; 0]; % levo obesišče
 B = [7; A(2)]; % desno obesišče
 
+g = 9.81; % gravitacijski pospešek
 u0 = 0;  % začetni približek za reševanje enačbe
 zac = [A(1), B(1); A(2), B(2)];  % matrika obesišč verižnice
-L = [1,2,1.5,3];  % dolžine prvih p palic
-M = [1,5,1,2];  % mase prvih p palic
+L = [1,2,1.5,3,3,2];  % dolžine prvih p palic
+M = [1,2,1,2,0.5,0.5];  % mase prvih p palic
 
 X = dis_ver(u0,zac,L,M)  % rešimo problem diskretne verižnice
 
 % Naloga 2: Odbijanje kroglice ko prosto pade z začetno hitrostjo v0 
 % na prvi členek verižnice.
 n = 100;  % število simuliranih odbojev
-v0 = [2; 1];  % vektor začetne hitrosti
-p0 = [-1; 1];  % vektor začetne lege
+v0 = [-3; 5];  % vektor začetne hitrosti
+p0 = [8; 1];  % vektor začetne lege
 prozno = false;  % če želimo prožne odboje je true, sicer false. Če 
 % nastavimo na false, risanka traja dlje in je zato bolj zanimivo.
 [T, P, V] = odboji(X, p0, v0, n, prozno)  % poračunamo čase, lege in hitrosti za n odbojev
@@ -30,12 +31,16 @@ x0=100;
 y0=100;
 % določimo velikost okvirja
 width=1000;
-height=800;
+height=900;
 % zgornje dejansko nastavimo
 set(gcf,'position',[x0,y0,width,height])
 % nastavimo si velikost koordinatnega sistema, 
-% da se med premikanjem žogice ne spreminja (trenutno je nastavljeno za ta konkreten primer)
-axis([-1 8 -7 3])  
+% da se med premikanjem žogice ne spreminja.
+% nastavimo ga tako, da bo vidna celotna verižnica in 
+% žogica ves čas skakanja.
+Wz = g * p0(2) + 0.5 * norm(v0)^2;  % energija na začetku
+h = Wz / g;  % maksimalna možna višina
+axis([A(1)-1 B(1)+1 min(X(2, :))-0.2 h+0.2])
 
 % narišemo verižnico
 risi_veriznica(X);

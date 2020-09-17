@@ -27,6 +27,11 @@ y0 = p0(2);
 vx = v0(1);
 vy = v0(2);
 
+% čas prvega in zadnjega odboja hranimo posebej, v primeru da 
+% kroglica zapusti verižnico.
+tz = NaN;
+tk = NaN;
+
 % poiščemo členek, na katerem se zgodi odboj
 for i = 1:n
     % določimo začetno (Z) in končno (K) točko členka verižnice, na katerem
@@ -37,14 +42,14 @@ for i = 1:n
     % določimo smerni koeficient in začetno vrednost premice, ki določa
     % členek
     k = (Z(2) - K(2)) / (Z(1) - K(1));
-    n = Z(2) - k * Z(1);
+    m = Z(2) - k * Z(1);
 
     % naš vektor položaja P(t) = (x0 + vx*t, y0 + vy*t + gt²/2) vstavimo v
     % enačbo y = kx + n, da dobimo kvadratno enačbo za t in določimo a, b, 
     % c in diskriminanto D
     b = k * vx - vy;
     a = g / 2;
-    c = n - y0 + k * x0;
+    c = m - y0 + k * x0;
     D = b ^2 - 4 * a * c;
     
     % preverimo, da ne bomo slučajno korenili negativnih vrednosti (se 
@@ -65,10 +70,16 @@ for i = 1:n
     if t1 < 0
         continue;
     end
+        
+    if i == 1
+        tz = t1;
+    elseif i == n
+        tk = t1;
+    end
 
     % poračunamo točko odboja
-    x = vx * t1 + x0;  % enakomerno gibanje v x smeri
-    y = k * x + n;  % točka leži na nosilki členka
+    x = x0 + vx * t1;  % enakomerno gibanje v x smeri
+    y = y0 + vy * t1 - g * t1^2 / 2;
    
     % če x leži na tej palici smo našli odboj in nastavimo izhodne
     % parametre
@@ -92,7 +103,7 @@ end
 % če položaja nismo našli, je žogico odneslo iz verižnice
 if isnan(p)
     out = true;
-    t = t1;  % čas nastavimo, saj bomo to želeli narisati
+    t = min(tz, tk) + 0.5;  % čas nastavimo, saj bomo to želeli narisati
 end
 
 
